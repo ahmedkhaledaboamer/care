@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "magic-patterns-vite-template",
+      "name": "-patterns-vite-template",
       "dependencies": {
         "@emotion/react": "^11.13.3",
         "framer-motion": "^11.5.4",

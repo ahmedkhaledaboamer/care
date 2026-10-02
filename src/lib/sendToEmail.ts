@@ -1,7 +1,7 @@
 /**
  * Centralized helper for sending form submissions to the brand email.
  *
- * IMPORTANT: This uses the `mailto:` protocol because Magic Patterns is a
+ * IMPORTANT: This uses the `mailto:` protocol because care is a
  * frontend-only environment with no backend. It opens the user's default
  * email app pre-filled with their submission, ready to send.
  *

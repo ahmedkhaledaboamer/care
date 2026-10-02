@@ -1,0 +1,10 @@
+# SPA fallback: serve index.html for any path that isn't a real file/folder,
+# so refreshing a React Router route doesn't 404 on Hostinger (Apache/LiteSpeed).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
