@@ -1,3 +1,5 @@
+import { shopEn } from './shop.en';
+import { dashEn } from './dash.en';
 export const en = {
   Header: {
     home: 'Home',
@@ -56,6 +58,7 @@ export const en = {
     directions: 'Direction for Use',
     sizes: 'Available Sizes',
     cta: 'Request Wholesale Quote',
+    viewDetails: 'View details',
     close: 'Close'
   },
   WhyChooseUs: {
@@ -262,5 +265,7 @@ export const en = {
     related: 'Related Articles',
     notFoundTitle: 'Article Not Found',
     notFoundDesc: 'The article you are looking for could not be found.'
-  }
+  },
+  ...shopEn,
+  ...dashEn
 };

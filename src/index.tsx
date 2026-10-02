@@ -1,11 +1,12 @@
 import React from 'react';
 import './index.css';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { LocaleProvider } from './lib/i18n';
-render(
-  <LocaleProvider>
-    <App />
-  </LocaleProvider>,
-  document.getElementById('root')
+createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <LocaleProvider>
+      <App />
+    </LocaleProvider>
+  </React.StrictMode>
 );

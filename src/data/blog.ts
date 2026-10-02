@@ -1,4 +1,7 @@
-import type { LocalizedString } from './products';
+export interface LocalizedString {
+  en: string;
+  ar: string;
+}
 
 export interface BlogPost {
   id: string;
@@ -50,7 +53,7 @@ export const blogPosts: BlogPost[] = [
   }],
 
   category: 'Haircare',
-  image:'/images/banner/b3.png',
+  image:'/images/banner/b3.webp',
   date: '2026-04-12',
   readMinutes: 5,
   author: {
@@ -85,7 +88,7 @@ export const blogPosts: BlogPost[] = [
   }],
 
   category: 'Skincare',
-  image:'/images/banner/b1.png',
+  image:'/images/banner/b1.webp',
   date: '2026-03-28',
   readMinutes: 6,
   author: {
@@ -120,7 +123,7 @@ export const blogPosts: BlogPost[] = [
   }],
 
   category: 'Skincare',
-  image:'/images/banner/b19.png',
+  image:'/images/banner/b19.webp',
   date: '2026-03-15',
   readMinutes: 4,
   author: {
@@ -156,7 +159,7 @@ export const blogPosts: BlogPost[] = [
 
   category: 'Business',
   image:
-'/images/banner/b6.png',
+'/images/banner/b6.webp',
   date: '2026-02-22',
   readMinutes: 7,
   author: {
@@ -187,7 +190,7 @@ export const blogPosts: BlogPost[] = [
 
   category: 'Skincare',
   image:
-'/images/banner/b8.png',
+'/images/banner/b8.webp',
   date: '2026-02-08',
   readMinutes: 5,
   author: {
@@ -218,7 +221,7 @@ export const blogPosts: BlogPost[] = [
 
   category: 'Wellness',
   image:
-'/images/banner/b2.png',
+'/images/banner/b2.webp',
   date: '2026-01-30',
   readMinutes: 4,
   author: {

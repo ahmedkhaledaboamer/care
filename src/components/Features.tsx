@@ -40,7 +40,7 @@ export function Features() {
 
             {/* Background Image */}
             <img
-              src="/images/banner/b13.png"
+              src="/images/banner/b13.webp"
               alt={t('card1Title')}
               className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -82,7 +82,7 @@ export function Features() {
 
             {/* Background Image */}
             <img
-              src="/images/banner/b15.png"
+              src="/images/banner/b15.webp"
               alt={t('card2Title')}
               className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
             />

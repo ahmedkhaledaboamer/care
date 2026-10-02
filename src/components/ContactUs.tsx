@@ -200,7 +200,7 @@ export function ContactUs() {
             className="relative h-full min-h-[500px] rounded-[2rem] overflow-hidden shadow-2xl">
             
             <img
- src="/images/banner/b8.png"              alt=""
+ src="/images/banner/b8.webp"              alt=""
               className="absolute inset-0 w-full h-full object-cover" />
             
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>

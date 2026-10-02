@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, ChevronRight, Droplet, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { products, type Product } from '../data/products';
+import type { Product } from '../api/types';
 import { ProductModal } from './ProductModal';
 import { useLocale, useTranslations } from '../lib/i18n';
+import { productTeaser, productTitle, text } from '../lib/localize';
+import { useCategoryProducts } from '../hooks/useCatalog';
+import { PriceTag } from './shop/ProductBits';
+import { Skeleton } from './ui/Spinner';
 export function NaturalHairCare() {
   const navigate = useNavigate();
   const t = useTranslations('NaturalHairCare');
   const locale = useLocale();
   const [selected, setSelected] = useState<Product | null>(null);
-  // Filter the 6 specific hair oils
-  const hairOils = products.filter(
-    (p) => p.category === 'Hair Care' && p.id.endsWith('-hair-oil')
-  );
+  // Live hair oils from the API (category "Hair Oils")
+  const { products: hairOils, categoryId, isLoading } = useCategoryProducts('Hair Oils', { limit: 6 });
   // Floating leaves animation variants
   const leafVariants = {
     animate: (i: number) => ({
@@ -130,9 +132,10 @@ export function NaturalHairCare() {
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {isLoading && Array.from({ length: 3 }, (_, i) => <Skeleton key={i} className="h-80 rounded-[2rem]" />)}
           {hairOils.map((product, index) =>
           <motion.div
-            key={product.id}
+            key={product._id}
             initial={{
               opacity: 0,
               y: 30
@@ -157,27 +160,31 @@ export function NaturalHairCare() {
               <div className="relative flex flex-col items-center text-center">
                 <div className="w-32 h-32 rounded-full overflow-hidden mb-6 shadow-md border-4 border-white group-hover:scale-105 transition-transform duration-500">
                   <img
-                  src={product.image}
-                  alt={product.name[locale]}
+                  src={product.imageCover}
+                  alt={productTitle(product, locale)}
+                  loading="lazy"
                   className="w-full h-full object-cover" />
                 
                 </div>
 
                 <h3 className="font-serif text-2xl font-bold text-brand-dark mb-2">
-                  {product.name[locale]}
+                  {productTitle(product, locale)}
                 </h3>
-                <p className="text-gray-500 text-sm mb-6 line-clamp-1">
-                  {product.shortDescription[locale]}
+                <p className="text-gray-500 text-sm mb-4 line-clamp-2">
+                  {productTeaser(product, locale)}
                 </p>
+                <div className="mb-4 flex justify-center">
+                  <PriceTag product={product} />
+                </div>
 
                 {/* Ingredient Chips */}
                 <div className="flex flex-wrap justify-center gap-2 mb-6">
-                  {product.ingredients.slice(0, 3).map((ing, i) =>
+                  {(product.ingredients ?? []).slice(0, 3).map((ing, i) =>
                 <span
                   key={i}
                   className="px-3 py-1 bg-brand-gold/5 text-brand-gold text-xs font-medium rounded-full">
                   
-                      {ing[locale]}
+                      {text(ing, locale)}
                     </span>
                 )}
                 </div>
@@ -194,7 +201,7 @@ export function NaturalHairCare() {
         {/* CTA */}
         <div className="text-center">
           <button
-            onClick={() => navigate('/products?category=Hair%20Care')}
+            onClick={() => navigate(categoryId ? `/categories/${categoryId}` : '/products')}
             className="px-8 py-4 rounded-full bg-gradient-to-r from-brand-gold to-brand-goldLight text-white font-semibold shadow-lg shadow-brand-gold/20 hover:shadow-brand-gold/40 transition-all hover:-translate-y-1 inline-flex items-center gap-2">
             
             {t('cta')}

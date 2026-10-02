@@ -50,7 +50,7 @@ export function Agents() {
             
             <div className="rounded-[2rem] overflow-hidden shadow-2xl  ">
               <img
- src="/images/banner/b7.png"
+ src="/images/banner/b7.webp"
                  alt="Business partnership and boutique"
                 className="w-full h-full object-cover" />
               

@@ -8,17 +8,21 @@ import {
   CheckCircle2 } from
 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { products, type Product } from '../data/products';
+import type { Product } from '../api/types';
 import { ProductModal } from './ProductModal';
 import { useLocale, useTranslations } from '../lib/i18n';
+import { productTeaser, productTitle } from '../lib/localize';
+import { useCategoryProducts } from '../hooks/useCatalog';
+import { PriceTag } from './shop/ProductBits';
+import { Skeleton } from './ui/Spinner';
 export function AntiAcneSection() {
   const navigate = useNavigate();
   const t = useTranslations('AntiAcne');
   const locale = useLocale();
   const [selected, setSelected] = useState<Product | null>(null);
-  // Filter the 4 anti-acne products
-  const acneProducts = products.filter((p) => p.category === 'Anti Acne');
-  // Map products to steps based on ID
+  // Live anti-acne products from the API (category "Anti Acne")
+  const { products: acneProducts, categoryId, isLoading } = useCategoryProducts('Anti Acne', { limit: 8 });
+  // Map products to routine steps based on their slug
   const getStepNumber = (id: string) => {
     if (id.includes('face-wash')) return 1;
     if (id.includes('soap')) return 2;
@@ -28,9 +32,9 @@ export function AntiAcneSection() {
   };
   // Sort products by step
   const sortedProducts = [...acneProducts].sort(
-    (a, b) => getStepNumber(a.id) - getStepNumber(b.id)
-  );
-  const faceWash = acneProducts.find((p) => p.id.includes('face-wash'));
+    (a, b) => getStepNumber(a.slug) - getStepNumber(b.slug)
+  ).slice(0, 4);
+  const faceWash = acneProducts.find((p) => p.slug.includes('face-wash')) ?? sortedProducts[0];
   const steps = [
   {
     title: t('step1Title'),
@@ -119,6 +123,7 @@ export function AntiAcneSection() {
 
           {/* Right Column: Featured Hero Card */}
           <div className="lg:w-1/2 flex justify-center items-center">
+            {isLoading && !faceWash && <Skeleton className="w-full max-w-md aspect-[4/5] rounded-[2.5rem]" />}
             {faceWash &&
             <motion.div
               initial={{
@@ -148,18 +153,21 @@ export function AntiAcneSection() {
                   <div className="aspect-square rounded-3xl overflow-hidden mb-8 bg-blue-50/50 flex items-center justify-center p-6 relative group">
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-goldLight/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <img
-                    src={faceWash.image}
-                    alt={faceWash.name[locale]}
+                    src={faceWash.imageCover}
+                    alt={productTitle(faceWash, locale)}
                     className="w-full h-full object-cover rounded-2xl shadow-lg group-hover:scale-105 transition-transform duration-500" />
                   
                   </div>
 
                   <h3 className="font-serif text-2xl font-bold text-brand-dark mb-3 text-center">
-                    {faceWash.name[locale]}
+                    {productTitle(faceWash, locale)}
                   </h3>
-                  <p className="text-gray-500 text-center mb-6">
-                    {faceWash.shortDescription[locale]}
+                  <p className="text-gray-500 text-center mb-4">
+                    {productTeaser(faceWash, locale)}
                   </p>
+                  <div className="flex justify-center mb-6">
+                    <PriceTag product={faceWash} />
+                  </div>
 
                   <button
                   onClick={() => setSelected(faceWash)}
@@ -205,11 +213,12 @@ export function AntiAcneSection() {
 
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {isLoading && Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-96 rounded-3xl" />)}
           {sortedProducts.map((product, index) => {
-            const stepNum = getStepNumber(product.id);
+            const stepNum = getStepNumber(product.slug);
             return (
               <motion.div
-                key={product.id}
+                key={product._id}
                 initial={{
                   opacity: 0,
                   y: 20
@@ -237,18 +246,22 @@ export function AntiAcneSection() {
 
                 <div className="relative w-full aspect-square rounded-2xl mb-5 overflow-hidden bg-blue-50/30 flex items-center justify-center p-4">
                   <img
-                    src={product.image}
-                    alt={product.name[locale]}
+                    src={product.imageCover}
+                    alt={productTitle(product, locale)}
+                    loading="lazy"
                     className="w-full h-full object-cover rounded-xl shadow-sm group-hover:scale-105 transition-transform duration-500" />
                   
                 </div>
 
                 <h3 className="font-serif text-lg font-bold text-brand-dark mb-2">
-                  {product.name[locale]}
+                  {productTitle(product, locale)}
                 </h3>
                 <p className="text-gray-500 text-xs mb-4 line-clamp-2 flex-grow">
-                  {product.shortDescription[locale]}
+                  {productTeaser(product, locale)}
                 </p>
+                <div className="mb-3">
+                  <PriceTag product={product} />
+                </div>
 
                 <div className="flex items-center gap-1 text-brand-goldLight font-semibold text-sm mt-auto">
                   {t('learnMore')}
@@ -262,7 +275,7 @@ export function AntiAcneSection() {
         {/* CTA */}
         <div className="text-center">
           <button
-            onClick={() => navigate('/products?category=Anti%20Acne')}
+            onClick={() => navigate(categoryId ? `/categories/${categoryId}` : '/products')}
             className="px-8 py-4 rounded-full bg-brand-goldLight text-white font-semibold shadow-lg shadow-brand-goldLight/20 hover:shadow-brand-goldLight/40 transition-all hover:-translate-y-1 inline-flex items-center gap-2">
             
             {t('cta')}

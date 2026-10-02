@@ -113,7 +113,7 @@ export function Hero() {
               className="absolute top-10 end-0 w-3/4 h-3/4 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-20">
               
               <img
-                src="/images/banner/b4.png"
+                src="/images/banner/b4.webp"
                 alt="Beautiful healthy hair & glowing skin model"
                 className="w-full h-full object-cover" />
               
@@ -132,7 +132,7 @@ export function Hero() {
               className="absolute bottom-0 start-0 w-1/2 h-1/2 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white z-30">
               
               <img
- src="/images/banner/b3.png"
+ src="/images/banner/b3.webp"
                  alt="Hair Oil Products"
                 className="w-full h-full object-cover" />
               
@@ -151,7 +151,7 @@ export function Hero() {
               className="absolute top-0 start-10 w-2/5 h-2/5 rounded-[2rem] overflow-hidden shadow-xl border-4 border-white z-10">
               
               <img
- src="/images/banner/b2.png"
+ src="/images/banner/b2.webp"
                  alt="Skin Care Collection"
                 className="w-full h-full object-cover" />
               

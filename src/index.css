@@ -40,3 +40,73 @@ html[dir="rtl"] .font-serif {
 ::-webkit-scrollbar-thumb:hover {
   background: #70A426;
 }
+
+/* ---------- Store locator map (Leaflet) ---------- */
+.rc-pin,
+.rc-user {
+  background: transparent;
+  border: 0;
+}
+.rc-user-dot {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #125697;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 6px rgba(18, 86, 151, 0.25);
+}
+.leaflet-container {
+  font-family: inherit;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(10, 46, 82, 0.18);
+}
+.leaflet-popup-content {
+  margin: 14px 16px;
+}
+.rc-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(10, 46, 82, 0.15);
+  color: #0a2e52 !important;
+  text-decoration: none;
+}
+.rc-popup-btn--primary {
+  background: linear-gradient(90deg, #70a426, #125697);
+  border-color: transparent;
+  color: #fff !important;
+}
+
+/* ---------- Brands marquee ---------- */
+@keyframes rc-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes rc-marquee-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+.rc-marquee-track {
+  animation: rc-marquee var(--rc-marquee-duration, 40s) linear infinite;
+}
+html[dir='rtl'] .rc-marquee-track {
+  animation-name: rc-marquee-rtl;
+}
+.rc-marquee:hover .rc-marquee-track,
+.rc-marquee:focus-within .rc-marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rc-marquee { overflow-x: auto; }
+  .rc-marquee-track { animation: none; }
+}
+.rc-marquee--reverse .rc-marquee-track {
+  animation-direction: reverse;
+}

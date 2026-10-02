@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import type { Product } from '../api/types';
+import { productTitle } from '../lib/localize';
+import { PriceTag } from './shop/ProductBits';
 import { motion } from 'framer-motion';
 import {
   Sun,
@@ -8,14 +12,16 @@ import {
   Droplets,
   ArrowRight } from
 'lucide-react';
-import { products } from '../data/products';
 import { ProductModal } from './ProductModal';
+import { useCategoryProducts } from '../hooks/useCatalog';
 import { useLocale, useTranslations } from '../lib/i18n';
 export function SummerSunProtection() {
   const t = useTranslations('SunProtection');
   const locale = useLocale();
-  const [modalOpen, setModalOpen] = useState(false);
-  const sunscreen = products.find((p) => p.id === 'sunscreen-spf-50') ?? null;
+  const [selected, setSelected] = useState<Product | null>(null);
+  // Featured sunscreen from the API (category "Sun Protection")
+  const { products: sunProducts, categoryId } = useCategoryProducts('Sun Protection', { limit: 8 });
+  const sunscreen = sunProducts.find((p) => p.featured) ?? sunProducts[0] ?? null;
   const tips = [
   {
     icon: ShieldCheck,
@@ -153,18 +159,17 @@ export function SummerSunProtection() {
 
             <div className="flex flex-wrap gap-4">
               <button
-                onClick={() => sunscreen && setModalOpen(true)}
+                onClick={() => sunscreen && setSelected(sunscreen)}
                 className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white font-semibold shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 transition-all hover:-translate-y-1 inline-flex items-center gap-2">
                 
                 {t('ctaShop')}
                 <ArrowRight className="w-5 h-5 rtl:rotate-180" />
               </button>
-              <a
-                href="#products"
+              <Link
+                to={categoryId ? `/categories/${categoryId}` : '/products'}
                 className="px-8 py-4 rounded-full bg-white text-brand-dark font-semibold border border-amber-200 shadow-sm hover:bg-amber-50 transition-all hover:-translate-y-1">
-                
                 {t('ctaExplore')}
-              </a>
+              </Link>
             </div>
           </motion.div>
 
@@ -188,7 +193,7 @@ export function SummerSunProtection() {
             
             <div className="relative aspect-[4/5] max-w-md mx-auto rounded-[2.5rem] overflow-hidden shadow-2xl">
               <img
- src="/images/banner/b10.png"                alt={t('imageAlt')}
+ src="/images/banner/b10.webp"                alt={t('imageAlt')}
                 className="w-full h-full object-cover" />
               
               <div className="absolute inset-0 bg-gradient-to-t from-amber-900/30 via-transparent to-transparent" />
@@ -245,11 +250,30 @@ export function SummerSunProtection() {
             <div className="absolute -bottom-2 -end-2 w-6 h-6 rounded-full bg-rose-300/60 blur-sm" />
           </motion.div>
         </div>
+
+        {/* Live sunscreen range */}
+        {sunProducts.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+            {sunProducts.slice(0, 4).map((p) => (
+              <button
+                key={p._id}
+                type="button"
+                onClick={() => setSelected(p)}
+                className="group text-start bg-white/80 backdrop-blur rounded-3xl p-4 border border-amber-100 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all">
+                <div className="aspect-square rounded-2xl overflow-hidden bg-amber-50/60 mb-3">
+                  <img src={p.imageCover} alt={productTitle(p, locale)} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+                <p className="font-serif font-bold text-brand-dark leading-snug line-clamp-2 mb-2">{productTitle(p, locale)}</p>
+                <PriceTag product={p} />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <ProductModal
-        product={modalOpen ? sunscreen : null}
-        onClose={() => setModalOpen(false)} />
+        product={selected}
+        onClose={() => setSelected(null)} />
       
     </section>);
 

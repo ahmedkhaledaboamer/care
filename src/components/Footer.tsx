@@ -6,15 +6,22 @@ import {
   Twitter,
   ArrowRight } from
 'lucide-react';
-import { useTranslations } from '../lib/i18n';
+import { useLocale, useTranslations } from '../lib/i18n';
+import { nameOf } from '../lib/localize';
 import { sendToEmail } from '../lib/sendToEmail';
+import { Link } from 'react-router-dom';
+import { useCategories } from '../hooks/useCatalog';
 export function Footer() {
   const tFooter = useTranslations('Footer');
   const tHeader = useTranslations('Header');
+  const tNav = useTranslations('Nav');
+  const tUi = useTranslations('Ui');
+  const locale = useLocale();
   const [newsletterEmail, setNewsletterEmail] = useState('');
+  const { data: apiCategories } = useCategories();
   const quickLinks: Array<
-    'home' | 'products' | 'about' | 'agents' | 'blog' | 'contact'> =
-  ['home', 'products', 'about', 'agents', 'blog', 'contact'];
+    'home' | 'products' | 'stores' | 'about' | 'agents' | 'blog' | 'contact'> =
+  ['home', 'products', 'stores', 'about', 'agents', 'blog', 'contact'];
   const categoryKeys = [
   'catHairOils',
   'catShampoo',
@@ -83,18 +90,22 @@ export function Footer() {
             <ul className="space-y-3">
               {quickLinks.map((key) =>
               <li key={key}>
-                  <a
-                  href={
-                  key === 'products' ?
-                  '/products' :
-                  key === 'blog' ?
-                  '/blog' :
-                  `#${key}`
-                  }
+                  {key === 'stores' ?
+                <Link to="/stores" className="text-gray-400 hover:text-white transition-colors">
+                      {tNav('stores')}
+                    </Link> :
+                key === 'products' || key === 'blog' ?
+                <Link to={`/${key}`} className="text-gray-400 hover:text-white transition-colors">
+                      {tHeader(key)}
+                    </Link> :
+
+                <a
+                  href={`/#${key}`}
                   className="text-gray-400 hover:text-white transition-colors">
-                  
+
                     {tHeader(key)}
                   </a>
+                }
                 </li>
               )}
             </ul>
@@ -105,14 +116,22 @@ export function Footer() {
               {tFooter('categories')}
             </h4>
             <ul className="space-y-3">
-              {categoryKeys.map((key) =>
+              {apiCategories && apiCategories.length > 0 ?
+              apiCategories.slice(0, 6).map((c) =>
+              <li key={c._id}>
+                    <Link to={`/categories/${c._id}`} className="text-gray-400 hover:text-white transition-colors">
+                      {nameOf(c, locale)}
+                    </Link>
+                  </li>
+              ) :
+              categoryKeys.map((key) =>
               <li key={key}>
-                  <a
-                  href="/products"
+                  <Link
+                  to="/products"
                   className="text-gray-400 hover:text-white transition-colors">
                   
                     {tFooter(key)}
-                  </a>
+                  </Link>
                 </li>
               )}
             </ul>
@@ -134,7 +153,7 @@ export function Footer() {
               
               <button
                 type="submit"
-                aria-label="Subscribe"
+                aria-label={tUi('subscribe')}
                 className="bg-brand-gold hover:bg-brand-goldLight text-brand-dark rounded-lg px-4 py-2 transition-colors flex items-center justify-center">
                 
                 <ArrowRight className="w-5 h-5 rtl:rotate-180" />

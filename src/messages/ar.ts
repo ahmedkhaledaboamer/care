@@ -1,3 +1,5 @@
+import { shopAr } from './shop.ar';
+import { dashAr } from './dash.ar';
 import type { en } from './en';
 
 export const ar: typeof en = {
@@ -57,6 +59,7 @@ export const ar: typeof en = {
     directions: 'طريقة الاستخدام',
     sizes: 'الأحجام المتوفرة',
     cta: 'اطلب عرض سعر بالجملة',
+    viewDetails: 'عرض التفاصيل',
     close: 'إغلاق'
   },
   WhyChooseUs: {
@@ -260,5 +263,7 @@ export const ar: typeof en = {
     related: 'مقالات ذات صلة',
     notFoundTitle: 'لم يتم العثور على المقال',
     notFoundDesc: 'المقال الذي تبحث عنه غير موجود.'
-  }
+  },
+  ...shopAr,
+  ...dashAr
 };

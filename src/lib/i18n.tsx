@@ -3,7 +3,8 @@ import React, {
   useMemo,
   useState,
   createContext,
-  useContext } from
+  useContext,
+  type ReactNode } from
 'react';
 import { messages, type Locale, type Messages } from '../messages';
 interface I18nContextValue {
@@ -57,10 +58,13 @@ export function useLocale(): Locale {
 export function useSetLocale(): (l: Locale) => void {
   return useI18n().setLocale;
 }
-/** next-intl compatible: returns t(key) scoped to a namespace */
+/**
+ * next-intl compatible: returns t(key) scoped to a namespace.
+ * Optional `vars` fill `{name}` placeholders.
+ */
 export function useTranslations(namespace?: string) {
   const { messages } = useI18n();
-  return (key: string): string => {
+  return (key: string, vars?: Record<string, string | number>): string => {
     const path = namespace ? `${namespace}.${key}` : key;
     const parts = path.split('.');
     let cur: unknown = messages;
@@ -75,6 +79,7 @@ export function useTranslations(namespace?: string) {
         return path; // fallback to key path if missing
       }
     }
-    return typeof cur === 'string' ? cur : path;
+    if (typeof cur !== 'string') return path;
+    return vars ? cur.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? String(vars[k]) : m)) : cur;
   };
 }

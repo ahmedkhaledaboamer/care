@@ -28,7 +28,7 @@ export function AboutUs() {
               className="relative z-10 rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] max-w-md mx-auto lg:mx-0">
               
               <img
- src="/images/banner/b2.png"                alt="Cosmetics laboratory and product showcase"
+ src="/images/banner/b2.webp"                alt="Cosmetics laboratory and product showcase"
                 className="w-full h-full object-cover" />
               
             </motion.div>
@@ -52,7 +52,7 @@ export function AboutUs() {
               className="absolute -bottom-10 -end-4 lg:-end-10 z-20 rounded-[2rem] overflow-hidden shadow-xl border-8 border-brand-cream w-2/3 aspect-square">
               
               <img
- src="/images/banner/b5.png"                alt="Beauty products flat lay"
+ src="/images/banner/b5.webp"                alt="Beauty products flat lay"
                 className="w-full h-full object-cover" />
               
             </motion.div>
